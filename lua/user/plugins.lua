@@ -21,7 +21,6 @@ return packer.startup(function(use)
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
 	use 'L3MON4D3/LuaSnip'
-
 	use 'saadparwaiz1/cmp_luasnip'
 
 	use 'sainnhe/gruvbox-material'
@@ -39,4 +38,6 @@ return packer.startup(function(use)
 	use 'akinsho/toggleterm.nvim'
 
 	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { {'nvim-lua/plenary.nvim'} } }
+
+	use "windwp/nvim-autopairs"
 end)
