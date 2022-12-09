@@ -35,8 +35,25 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = cmplsp.default_capabilities(capabilities)
 
-local servers = { 'clangd', 'rust_analyzer', 'gopls' }
-for _, lsp in ipairs(servers) do
+lspconfig.clangd.setup {
+	on_attach = on_attach,
+	cmd = {
+		'clangd',
+		'--background-index',
+		'-j=2',
+		'--all-scopes-completion',
+		'--completion-style=detailed',
+		'--limit-results=50',
+		'--suggest-missing-includes',
+		'--header-insertion=never'
+	},
+	filetypes = { "c", "cpp" },
+	init_option = { fallbackFlags = { "-std=c++20" } },
+	capabilities = capabilities
+}
+
+local default_servers = { 'rust_analyzer', 'gopls' }
+for _, lsp in ipairs(default_servers) do
 	lspconfig[lsp].setup {
 		on_attach = on_attach,
 		capabilities = capabilities,
