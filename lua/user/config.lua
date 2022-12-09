@@ -11,7 +11,9 @@ local configs = {
 	background = 'dark',
 	updatetime = 1000,
 	mouse = '',
-	relativenumber = true
+	relativenumber = true,
+	ignorecase = true,
+	smartcase = true
 }
 
 for k, v in pairs(configs) do
