@@ -12,3 +12,12 @@ treesitter.setup {
 	},
 	indent = { enable = true }
 }
+
+-- Create folds based on treesitter's ast
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldlevel = 999
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = { "*" },
+    command = "normal zx",
+})
