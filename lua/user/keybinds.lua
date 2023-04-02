@@ -8,8 +8,9 @@ keymap('n', "'", ':noh<CR>', {})		-- remove selection
 keymap('n', 'U', '<C-r>', {})			-- fast redo
 keymap('n', '<Tab>', '<C-o>', {})		-- Tab for going back
 keymap('n', '<S-Tab>', '<C-i>', {})		-- S-Tab for going forward
-keymap('i', '<C-z>', '<esc><C-z>', {})	-- C-z in insert mode
 keymap('i', '<C-w>', '<esc><C-w>', {})	-- C-w in insert mode
+keymap('n', '<CR>', '<C-a>', {})		-- Increment number with CR
+keymap('n', '<BS>', '<C-x>', {})		-- Decrement number with BS
 
 -- Run code with make run
 keymap('n', '<leader>w', ':TermExec cmd="make run"<CR>', { noremap = true, silent = true })
