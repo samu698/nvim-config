@@ -23,3 +23,7 @@ end
 vim.cmd 'colorscheme gruvbox-material'
 
 vim.cmd 'set path+=/usr/include/c++/11.2.0/'
+
+-- Highlight trailing whitespace
+vim.api.nvim_set_hl(0, 'TrailingWhitespace', { ctermbg='red', bg='red' })
+vim.cmd [[match TrailingWhitespace /\s\+\%#\@<!$/]]
