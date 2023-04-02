@@ -14,10 +14,8 @@ keymap('n', '<BS>', '<C-x>', {})		-- Decrement number with BS
 
 -- Run code with make run
 keymap('n', '<leader>w', ':TermExec cmd="make run"<CR>', { noremap = true, silent = true })
--- Keymaps for terminal
-keymap('t', '<esc>', '<C-\\><C-n>', {noremap = true})
-keymap('t', '<C-Z>', '<C-\\><C-n><C-Z>', {noremap = true})
-keymap('t', '<F2>', '<esc>', { noremap = true })
+-- Easier way to escape the terminal
+keymap('t', '<Del>', '<C-\\><C-n>', {noremap = true})
 
 local ok, pickers = pcall(require, 'telescope.builtin')
 if ok then
