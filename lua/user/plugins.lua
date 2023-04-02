@@ -6,7 +6,7 @@ end
 packer.init {
 	package_root = vim.fn.stdpath('config') .. '/pack',
 	display = {
-		open_fn = function() 
+		open_fn = function()
 			return require('packer.util').float { border = 'rounded' }
 		end
 	}
@@ -14,7 +14,7 @@ packer.init {
 
 return packer.startup(function(use)
 	use 'wbthomason/packer.nvim'
-	
+
 	use 'neovim/nvim-lspconfig'
 	use 'hrsh7th/nvim-cmp'
 	use 'hrsh7th/cmp-nvim-lsp'
@@ -32,6 +32,7 @@ return packer.startup(function(use)
 	use 'lukas-reineke/indent-blankline.nvim'
 
 	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+	use { 'HiPhish/nvim-ts-rainbow2' }
 
 	use 'samu698/autoIndent.nvim'
 

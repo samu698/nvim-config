@@ -4,13 +4,29 @@ if not ok then
 end
 
 treesitter.setup {
-	enure_installed = { 'bash', 'c', 'cpp', 'glsl', 'html', 'javascript', 'css', 'make', 'lua' },
+	enure_installed = { 'bash', 'c', 'cpp', 'glsl', 'html', 'javascript', 'css', 'make', 'lua', 'rust' },
 	sync_install = false,
 	highlight = {
 		enable = true,
 		additional_vim_regex_highlighting = false
 	},
-	indent = { enable = true }
+	indent = { enable = true },
+	rainbow = {
+		enable = true,
+		extended_mode = true,
+		max_file_lines = nil,
+		hlgroups = {
+			'RainbowLevel0',
+			'RainbowLevel1',
+			'RainbowLevel2',
+			'RainbowLevel3',
+			'RainbowLevel4',
+			'RainbowLevel5',
+			'RainbowLevel6',
+			'RainbowLevel7',
+			'RainbowLevel8',
+		}
+	}
 }
 
 -- Create folds based on treesitter's ast
