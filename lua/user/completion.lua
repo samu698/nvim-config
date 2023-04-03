@@ -47,8 +47,8 @@ cmp.setup {
 		end
 	},
 	mapping = {
-		['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-1), { 'i', 'c' }),
-		['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(1), { 'i', 'c' }),
+		['<A-j>'] = cmp.mapping(cmp.mapping.scroll_docs(1), { 'i', 'c' }),
+		['<A-k>'] = cmp.mapping(cmp.mapping.scroll_docs(-1), { 'i', 'c' }),
 		['<Down>'] = cmp.mapping({
 			i = cmp.mapping.select_next_item({ behavior = cmptypes.cmp.SelectBehavior.Select }),
 			c = function(fallback)
