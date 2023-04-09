@@ -6,6 +6,8 @@ end
 local opts = { noremap = true, silent = true }
 
 local on_attach = function(client, bufnr)
+	client.server_capabilities.semanticTokensProvider = nil
+
 	local keymap = function(mode, key, action, in_opts)
 		vim.api.nvim_buf_set_keymap(bufnr, mode, key, action, in_opts)
 	end
