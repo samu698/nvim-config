@@ -13,20 +13,20 @@ end
 vim.api.nvim_set_keymap('i', '<C-Right>', '<cmd>lua vim.lsp.handlers.signature_help()<cr>', {})
 
 local kind_icons = {
-	Text = "",
-	Method = "m",
-	Function = "",
+	Text = "󰦨",
+	Method = "",
+	Function = "󰊕",
 	Constructor = "",
 	Field = "",
-	Variable = "",
-	Class = "",
+	Variable = "",
+	Class = "",
 	Interface = "",
 	Module = "",
 	Property = "",
 	Unit = "",
 	Value = "",
 	Enum = "",
-	Keyword = "",
+	Keyword = "",
 	Snippet = "",
 	Color = "",
 	File = "",
@@ -99,11 +99,11 @@ cmp.setup {
 			return vim_item
 		end
 	},
-	sources = { 
+	sources = {
 		{ name = 'nvim_lsp' },
 		{ name = 'luasnip' },
-		{ name = 'path' }, 
-		{ name = 'buffer' } 
+		{ name = 'path' },
+		{ name = 'buffer' }
 	},
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
