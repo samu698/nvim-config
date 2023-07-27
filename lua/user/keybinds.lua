@@ -19,14 +19,38 @@ keymap('t', '<Del>', '<C-\\><C-n>', {noremap = true})
 
 local ok, pickers = pcall(require, 'telescope.builtin')
 if ok then
-	keymap('n', '<leader>g', pickers.git_files, {})
-	keymap('n', '<leader>f', pickers.find_files, {})
-
-	function man_pages()
-		pickers.man_pages { sections = { "2", "3", "3p", "3type", "7" } }
+	function find_files()
+		pickers.find_files {
+			find_command = {
+				'find',
+				'-type', 'f',
+				'-maxdepth', '5',
+				'-not', '-path', '*/.*/*',
+				'-not', '-path', '*/target/*',
+				'-not', '-name', 'Cargo.lock',
+			}
+		}
 	end
 
-	keymap('n', '<leader>m', man_pages, {})
+	keymap('n', '<leader>f', find_files, {})
+
+	function git_or_files()
+		vim.fn.system('git rev-parse --is-inside-work-tree')
+		if vim.v.shell_error == 0 then
+			local commit_count = tonumber(vim.fn.system('git rev-list --all --count'))
+			if commit_count ~= 0 then
+				pickers.git_files()
+			else
+				vim.print 'No commits in git repository, falling back to file view'
+				find_files()
+			end
+		else
+			vim.print 'Not inside a git repository, falling back to file view'
+			find_files()
+		end
+	end
+
+	keymap('n', '<leader>g', git_or_files, {})
 end
 
 function toggle_invisible()
