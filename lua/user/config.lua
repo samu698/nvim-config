@@ -13,7 +13,8 @@ local configs = {
 	mouse = '',
 	relativenumber = true,
 	ignorecase = true,
-	smartcase = true
+	smartcase = true,
+	scrolloff = 999,
 }
 
 for k, v in pairs(configs) do
