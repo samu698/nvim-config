@@ -35,10 +35,9 @@ if ok then
 	keymap('n', '<leader>f', find_files, {})
 
 	function git_or_files()
-		vim.fn.system('git rev-parse --is-inside-work-tree')
+		local commit_count = tonumber(vim.fn.system('git rev-list --all --count'))
 		if vim.v.shell_error == 0 then
-			local commit_count = tonumber(vim.fn.system('git rev-list --all --count'))
-			if commit_count ~= 0 then
+			if commit_count ~= 0 and commit_count ~= nil then
 				pickers.git_files()
 			else
 				vim.print 'No commits in git repository, falling back to file view'
