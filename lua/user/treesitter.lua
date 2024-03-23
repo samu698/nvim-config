@@ -4,7 +4,7 @@ if not ok then
 end
 
 treesitter.setup {
-	enure_installed = { 'bash', 'c', 'cpp', 'glsl', 'html', 'javascript', 'css', 'make', 'lua', 'rust' },
+	enure_installed = { 'bash', 'c', 'cpp', 'glsl', 'html', 'javascript', 'css', 'make', 'lua', 'rust', 'java' },
 	sync_install = false,
 	highlight = {
 		enable = true,

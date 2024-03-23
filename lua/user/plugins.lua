@@ -38,7 +38,7 @@ return packer.startup(function(use)
 
 	use 'akinsho/toggleterm.nvim'
 
-	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { {'nvim-lua/plenary.nvim'} } }
+	use { 'nvim-telescope/telescope.nvim', requires = { {'nvim-lua/plenary.nvim'} } }
 
 	use "windwp/nvim-autopairs"
 end)

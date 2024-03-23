@@ -54,7 +54,32 @@ lspconfig.clangd.setup {
 	capabilities = capabilities
 }
 
-local default_servers = { 'rust_analyzer', 'gopls' }
+lspconfig.rust_analyzer.setup {
+	on_attach = on_attach,
+	cmd = {
+		'rust-analyzer',
+		'-v',
+		'-v',
+		'--log-file',
+		'/home/samu698/projects/lsp.log'
+	},
+	capabilities = capabilities
+}
+
+lspconfig.pylsp.setup {
+	settings = {
+		pylsp = {
+			plugins = {
+				pycodestyle = {
+					ignore = {'W391'},
+					maxLineLength = 120
+				}
+			}
+		}
+	}
+}
+
+local default_servers = { 'gopls', 'asm_lsp', 'fsautocomplete' }
 for _, lsp in ipairs(default_servers) do
 	lspconfig[lsp].setup {
 		on_attach = on_attach,
