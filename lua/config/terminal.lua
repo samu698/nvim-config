@@ -14,13 +14,11 @@ M.flatten = {
         open = "current",
     },
     post_open = function(bufnr, winnr, ft, is_blocking)
-        vim.print("Post open")
         if ft == "gitcommit" or ft == "gitrebase" then
             vim.api.nvim_create_autocmd("BufWritePost", {
                 buffer = bufnr,
                 once = true,
                 callback = vim.schedule_wrap(function()
-                    vim.print("Delete buffer")
                     vim.api.nvim_buf_delete(bufnr, {})
                 end)
             })
