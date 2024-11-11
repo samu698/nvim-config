@@ -43,7 +43,7 @@ return {
         priority = 1000,
         opts = {
             window = {
-                open = "smart"
+                open = "alternate",
             },
         },
     },
