@@ -27,25 +27,14 @@ return {
 
     {
         "akinsho/toggleterm.nvim",
-        opts = {
-            open_mapping = require("config.mappings").terminal_open,
-            autochdir = true,
-            direction = 'float',
-            float_opts = {
-                border = 'curved'
-            }
-        },
+        opts = require("config.terminal").toggleterm,
     },
 
     {
         "willothy/flatten.nvim",
         lazy = false,
         priority = 1000,
-        opts = {
-            window = {
-                open = "alternate", -- test
-            },
-        },
+        opts = require("config.terminal").flatten,
     },
 
     {
