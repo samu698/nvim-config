@@ -1,14 +1,23 @@
-local configs = {
-    --mouse = '',
+local utils = require("utils")
+
+local neovide = vim.g.neovide
+
+utils.config.set(vim.opt, {
+    mouse = "a",
+    mousemodel = "extend",
+
     updatetime = 1000,
+    ignorecase = true,  -- Required to make smartcase work
     smartcase = true,
+    magic = false,      -- This might break some plugins
     swapfile = false,
     undofile = true,
 
     tabstop = 4,
-    softtabstop = 4,
+    softtabstop = 0,
     shiftwidth = 4,
     expandtab = true,
+    colorcolumn = '80',
     wrap = false,
 
     termguicolors = true,
@@ -18,24 +27,23 @@ local configs = {
     background = "dark",
     scrolloff = 999,
     laststatus = 3,
-    --cmdheight = 0,
-    fillchars = "eob: ", -- Remove empty buffer lines char
-}
+    fillchars = { {eob = " "}, append = true },
+    listchars = { {trail = "~"}, append = true },
+    showcmdloc = "statusline",
+    showmode = false,
 
-for k, v in pairs(configs) do
-    vim.opt[k] = v
-end
+    guifont = { "Maple Mono NF CF:h12", enable = neovide }
+})
 
--- Disable netrw in favor of nvim-tree
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+utils.config.set(vim.g, {
+    neovide_padding_top = { 0, enable = neovide },
+    neovide_padding_bottom = { 0, enable = neovide },
+    neovide_padding_right = { 0, enable = neovide },
+    neovide_padding_left = { 0, enable = neovide },
+    neovide_scroll_animation_length = { 0, enable = neovide },
+})
 
--- Neovide config
-if vim.g.neovide then
-    vim.o.guifont = "FiraCode Nerd Font Mono:h12"
-    vim.g.neovide_padding_top = 0
-    vim.g.neovide_padding_bottom = 0
-    vim.g.neovide_padding_right = 0
-    vim.g.neovide_padding_left = 0
-    vim.g.neovide_scroll_animation_length = 0
+utils.map.load("global")
+if neovide then
+    utils.map.load("neovide")
 end
