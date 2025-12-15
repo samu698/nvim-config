@@ -43,16 +43,19 @@ map.set("neovide", {}, {
     { "<CS-v>", "t", "<C-\\><C-n>\"+pi" },  -- Paste in neovide (Terminal)
 })
 
+local function jump_next_diag() vim.diagnostic.jump({count=1, float=true}) end
+local function jump_prev_diag() vim.diagnostic.jump({count=1, float=true}) end
+
 map.set("lsp", { "buf" }, {
-    { "gd", "n", vim.lsp.buf.definition },          -- Go to definition
-    { "gD", "n", vim.lsp.buf.declaration },         -- Go to declaration
-    { "gi", "n", vim.lsp.buf.implementation },      -- Go to implementation
-    { "gT", "n", vim.lsp.buf.type_definition },     -- Go to type definition
-    { "gr", "n", vim.lsp.buf.references },          -- Go to references
-    { "g[", "n", vim.diagnostic.goto_next },        -- Go to next error
-    { "g]", "n", vim.diagnostic.goto_prev },        -- Go to previous error
-    { "<leader>r", "n", vim.lsp.buf.rename },       -- Rename symbol
-    { "<leader>a", "n", vim.lsp.buf.code_action },  -- Run code action
+    { "gd", "n", vim.lsp.buf.definition },           -- Go to definition
+    { "gD", "n", vim.lsp.buf.declaration },          -- Go to declaration
+    { "gi", "n", vim.lsp.buf.implementation },       -- Go to implementation
+    { "gT", "n", vim.lsp.buf.type_definition },      -- Go to type definition
+    { "gr", "n", vim.lsp.buf.references },           -- Go to references
+    { "g[", "n", jump_next_diag },                   -- Go to next error
+    { "g]", "n", jump_prev_diag },                   -- Go to previous error
+    { "<leader>r", "n", vim.lsp.buf.rename },        -- Rename symbol
+    { "<leader>a", "n", vim.lsp.buf.code_action },   -- Run code action
 })
 
 map.set("nvim-cmp", {}, {
