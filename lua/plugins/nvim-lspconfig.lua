@@ -4,9 +4,14 @@ local utils = require("utils")
 
 local lsps = {
     rust_analyzer = {
-        imports = {
-            granularity = "module",
-            preferPrelude = true,
+        settings = {
+            imports = {
+                granularity = "module",
+                preferPrelude = true,
+            },
+            cargo = {
+                target = "x86_64-unknown-freebsd",
+            },
         },
     },
     clangd = {

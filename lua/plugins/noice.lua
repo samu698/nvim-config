@@ -1,15 +1,20 @@
 return {
     "folke/noice.nvim",
     dependencies = {
-        "MunifTanjim/nui.nvim",
+        {
+            "MunifTanjim/nui.nvim",
+            lazy = false,
+        },
         "rcarriga/nvim-notify",
     },
+    ---@type NoiceConfig
     opts = {
         messages = {
             view = "mini",
         },
         presets = {
             bottom_search = true,
+            long_message_to_split = true,
         },
         redirect = {
             view = "notify",

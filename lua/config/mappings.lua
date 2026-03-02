@@ -1,5 +1,6 @@
 local map = require("utils").map
 local cmp = require("utils").cmp
+local quickfix = require("functions.quickfix")
 
 vim.g.mapleader = " "
 
@@ -35,6 +36,7 @@ map.set("global", {}, {
 
 -- Disable partial write
 -- Copied from: https://vi.stackexchange.com/questions/16732/avoid-write-partial-file
+-- FIXME: doesn't work fully
 vim.cmd([[cabbrev <expr> w getcmdtype()==':' && getcmdline() == "'<,'>w" ? '<c-u>w' : 'w']])
 
 map.set("neovide", {}, {
@@ -45,11 +47,12 @@ map.set("neovide", {}, {
 
 local function jump_next_diag() vim.diagnostic.jump({count=1, float=true}) end
 local function jump_prev_diag() vim.diagnostic.jump({count=1, float=true}) end
+local function implementation() vim.lsp.buf.implementation({ on_list = quickfix.on_list }) end
 
 map.set("lsp", { "buf" }, {
     { "gd", "n", vim.lsp.buf.definition },           -- Go to definition
     { "gD", "n", vim.lsp.buf.declaration },          -- Go to declaration
-    { "gi", "n", vim.lsp.buf.implementation },       -- Go to implementation
+    { "gi", "n", implementation },       -- Go to implementation
     { "gT", "n", vim.lsp.buf.type_definition },      -- Go to type definition
     { "gr", "n", vim.lsp.buf.references },           -- Go to references
     { "g[", "n", jump_next_diag },                   -- Go to next error
