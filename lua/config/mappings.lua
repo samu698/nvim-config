@@ -45,16 +45,20 @@ map.set("neovide", {}, {
     { "<CS-v>", "t", "<C-\\><C-n>\"+pi" },  -- Paste in neovide (Terminal)
 })
 
+local function definition() vim.lsp.buf.definition(quickfix.list_opts()) end
+local function declaration() vim.lsp.buf.declaration(quickfix.list_opts()) end
+local function implementation() vim.lsp.buf.implementation(quickfix.list_opts()) end
+local function type_definition() vim.lsp.buf.type_definition(quickfix.list_opts()) end
+local function references() vim.lsp.buf.references(quickfix.list_opts()) end
 local function jump_next_diag() vim.diagnostic.jump({count=1, float=true}) end
 local function jump_prev_diag() vim.diagnostic.jump({count=1, float=true}) end
-local function implementation() vim.lsp.buf.implementation({ on_list = quickfix.on_list }) end
 
 map.set("lsp", { "buf" }, {
-    { "gd", "n", vim.lsp.buf.definition },           -- Go to definition
-    { "gD", "n", vim.lsp.buf.declaration },          -- Go to declaration
-    { "gi", "n", implementation },       -- Go to implementation
-    { "gT", "n", vim.lsp.buf.type_definition },      -- Go to type definition
-    { "gr", "n", vim.lsp.buf.references },           -- Go to references
+    { "gd", "n", definition },                       -- Go to definition
+    { "gD", "n", declaration },                      -- Go to declaration
+    { "gi", "n", implementation },                   -- Go to implementation
+    { "gT", "n", type_definition },                  -- Go to type definition
+    { "gr", "n", references },                       -- Go to references
     { "g[", "n", jump_next_diag },                   -- Go to next error
     { "g]", "n", jump_prev_diag },                   -- Go to previous error
     { "<leader>r", "n", vim.lsp.buf.rename },        -- Rename symbol
