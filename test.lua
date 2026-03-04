@@ -3,6 +3,20 @@ local Popup = require("nui.popup")
 local Menu = require("nui.menu")
 local event = require("nui.utils.autocmd").event
 
+---@param path string The file to open
+---@param line integer The line where to center the preview
+---@return number? bufnr The id of the preview buffer
+local function load_preview(path, line)
+    local lines = vim.fn.readfile(path)
+    local bufnr = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+
+    local ft = vim.filetype.match({ filename = path }) or ""
+    vim.bo[bufnr].modifiable = false
+    vim.bo[bufnr].filetype = ft
+    return bufnr
+end
+
 local function spawn_quickfix(files)
     local menu_items = {}
     local longest_line = 0
@@ -38,35 +52,13 @@ local function spawn_quickfix(files)
 
             -- Show preview
             vim.schedule(function()
-                local old_eventignore = vim.opt.eventignore
-                vim.opt.eventignore:append("BufEnter,BufWinEnter")
-
+                --local path = vim.uv.fs_realpath(item.text)
                 local path = vim.fn.fnamemodify(item.text, ":p")
-                local source_bufnr = vim.fn.bufadd(path)
-                vim.fn.bufload(source_bufnr)
-                vim.bo[source_bufnr].modifiable = false
+                local bufnr = load_preview(path, 0)
+                if not bufnr then return end
 
-                local preview_bufnr = vim.api.nvim_create_buf(false, true)
-
-                local lines = vim.api.nvim_buf_get_lines(source_bufnr, 0, -1, false)
-                vim.api.nvim_buf_set_lines(preview_bufnr, 0, -1, false, lines)
-
-                local ft = vim.bo[source_bufnr].filetype
-                local has_lang, lang = pcall(vim.treesitter.language.get_lang, ft)
-                lang = has_lang and lang or ft
-                local has_parser, parser = pcall(vim.treesitter.get_parser, preview_bufnr, lang, { error = false })
-                has_parser = has_parser and parser ~= nil
-                if has_parser then
-                    has_parser = pcall(vim.treesitter.start, preview_bufnr, lang)
-                end
-                if not has_parser then
-                    vim.bo[preview_bufnr].syntax = ft
-                end
-                vim.bo[preview_bufnr].modifiable = false
-
-                vim.api.nvim_win_set_buf(preview_popup.winid, preview_bufnr)
-
-                vim.opt.eventignore = old_eventignore
+                vim.api.nvim_win_set_buf(preview_popup.winid, bufnr)
+                vim.wo[preview_popup.winid].number = true
             end)
         end,
     })
@@ -93,5 +85,5 @@ local function spawn_quickfix(files)
     layout:mount()
 end
 
-spawn_quickfix({ "~/projects/aoc/d1/main.c", "~/projects/aoc/d2/src/main.rs", "~/projects/aoc/d6/src/main.rs" })
+spawn_quickfix({ "~/projects/aoc/d2/src/main.rs", "~/projects/aoc/d3/src/main.rs", "~/projects/aoc/d4/src/main.rs" })
 
