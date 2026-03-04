@@ -1,16 +1,12 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    dependencies = { "HiPhish/rainbow-delimiters.nvim" },
-    build = ":TSUpdate",
-    config = function(_, opts)
-        local configs = require("nvim-treesitter.configs")
-        configs.setup(opts)
-
-        local rainbow_delimiters = require("rainbow-delimiters")
-        vim.g.rainbow_delimiters = {
+    dependencies = {
+        "HiPhish/rainbow-delimiters.nvim",
+        main = 'rainbow-delimiters.setup',
+        opts = {
             strategy = {
-                [""] = rainbow_delimiters.strategy["global"],
-                vim = rainbow_delimiters.strategy["local"],
+                [""] = "rainbow-delimiters.strategy.global",
+                vim = "rainbow_delimiters.strategy.local",
             },
             query = {
                 [""] = "rainbow-delimiters",
@@ -29,8 +25,10 @@ return {
                 "rainbowcol6",
                 "rainbowcol7",
             },
-        }
-    end,
+        },
+    },
+    lazy = false,
+    build = ":TSUpdate",
     opts = {
         ensure_installed = {
             "c", "cpp",
