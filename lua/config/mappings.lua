@@ -1,6 +1,5 @@
 local map = require("utils").map
 local cmp = require("utils").cmp
-local quickfix = require("functions.quickfix")
 
 vim.g.mapleader = " "
 
@@ -45,11 +44,24 @@ map.set("neovide", {}, {
     { "<CS-v>", "t", "<C-\\><C-n>\"+pi" },  -- Paste in neovide (Terminal)
 })
 
-local function definition() vim.lsp.buf.definition(quickfix.list_opts()) end
-local function declaration() vim.lsp.buf.declaration(quickfix.list_opts()) end
-local function implementation() vim.lsp.buf.implementation(quickfix.list_opts()) end
-local function type_definition() vim.lsp.buf.type_definition(quickfix.list_opts()) end
-local function references() vim.lsp.buf.references(quickfix.list_opts()) end
+---@return vim.lsp.LocationOpts opts
+local function list_opts()
+    ---@type vim.lsp.LocationOpts
+    local opts = {
+        on_list = function(t)
+            local quickfix = require("functions.quickfix")
+            local title = t.title or "[Quickfix]"
+            quickfix.open_qflist(title, t.items)
+        end
+    }
+    return opts
+end
+
+local function definition() vim.lsp.buf.definition(list_opts()) end
+local function declaration() vim.lsp.buf.declaration(list_opts()) end
+local function implementation() vim.lsp.buf.implementation(list_opts()) end
+local function type_definition() vim.lsp.buf.type_definition(list_opts()) end
+local function references() vim.lsp.buf.references(nil, list_opts()) end
 local function jump_next_diag() vim.diagnostic.jump({count=1, float=true}) end
 local function jump_prev_diag() vim.diagnostic.jump({count=1, float=true}) end
 

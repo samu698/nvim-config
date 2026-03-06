@@ -4,7 +4,24 @@ return {
     "f4z3r/gruvbox-material.nvim",
     lazy = false,
     priority = 1000,
-    opts = {},
+    opts = function()
+        local colors = require("gruvbox-material.colors").get(vim.o.background, "soft")
+        return {
+            customize = function(group, opts)
+                if group == "Search" then
+                    opts.fg = nil
+                    opts.bg = colors.bg_diff_green
+                end
+
+                if group == "IncSearch" then
+                    opts.fg = nil
+                    opts.bg = colors.bg_diff_red
+                end
+
+                return opts
+            end
+        }
+    end,
     init = function()
         utils.config.set(vim.g, {
             terminal_color_0  = "#000000",
