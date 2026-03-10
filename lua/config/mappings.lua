@@ -65,6 +65,34 @@ map.set("lsp", { "buf" }, {
     { "<leader>a", "n", vim.lsp.buf.code_action },   -- Run code action
 })
 
+local function dap_breakpoint() require("dap").toggle_breakpoint() end
+local function dap_step_into() require("dap").step_into() end
+local function dap_step_over() require("dap").step_over() end
+local function dap_step_out() require("dap").step_out() end
+local function dap_continue() require("dap").continue() end
+local function dap_disconnect() require("dap").disconnect() end
+local function dap_terminate() require("dap").terminate() end
+local function dap_toggle_server()
+    local osv = require("osv")
+    if osv.is_running() then
+        osv.stop()
+        vim.print("Server stopped")
+    else
+        osv.launch({port = 8086})
+    end
+end
+
+map.set("dap", {}, {
+    { "<F1>", "n", dap_breakpoint },
+    { "<F2>", "n", dap_step_over },
+    { "<F3>", "n", dap_step_into },
+    { "<F4>", "n", dap_step_out },
+    { "<F5>", "n", dap_continue },
+    { "<leader>dd", "n", dap_disconnect },
+    { "<leader>dt", "n", dap_terminate },
+    { "<leader>ss", "n", dap_toggle_server },
+})
+
 map.set("nvim-cmp", {}, {
     { "<A-j>", "is", cmp.scroll_docs(1) },
     { "<A-k>", "is", cmp.scroll_docs(-1) },
