@@ -15,6 +15,7 @@ local ns = vim.api.nvim_create_namespace("ui_preview")
 ---@field private buffers table<string, Preview.bufinfo>
 ---@field private current_buf integer?
 ---@field private to_show { item: Quickfix.item, bufnr: integer }?
+---@field private should_enter boolean?
 ---@diagnostic disable-next-line: undefined-field
 local Preview = Popup:extend("Preview")
 
@@ -62,9 +63,12 @@ function Preview:update_window(item, bufnr)
 
     -- Move the currsor to the correct line and highlight it
     vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
-    if item.line then
-        vim.api.nvim_win_set_cursor(self.winid, { item.line, 0 } )
-        vim.hl.range(bufnr, ns, "Search", { item.line - 1, 0 }, { item.line - 1, -1 })
+    if item.pos then
+        vim.api.nvim_win_set_cursor(self.winid, item.pos)
+
+        -- TODO: for now we highlight only the current line
+        local line = item.pos[1]
+        vim.hl.range(bufnr, ns, "Search", { line - 1, 0 }, { line - 1, -1 })
     end
 end
 
@@ -76,6 +80,24 @@ function Preview:_open_window()
         self:update_window(self.to_show.item, self.to_show.bufnr)
         self.to_show = nil
     end
+
+    if self.should_enter then
+        self:_enter()
+        self.should_enter = false
+    end
+end
+
+--- Move the cursor to this window
+function Preview:enter()
+    if self.winid then self:_enter() end
+    self.should_enter = true
+end
+
+--- Moves the cursor to the window without waiting
+---@private
+function Preview:_enter()
+    assert(self.winid)
+    vim.api.nvim_set_current_win(self.winid)
 end
 
 --- Removes loaded buffers from the cache, except the currenty shown one
@@ -101,7 +123,6 @@ end
 function Preview:unmount()
     ---@diagnostic disable-next-line: undefined-field
     Preview.super.unmount(self)
-
 
     if self.current_buf then
         vim.api.nvim_buf_clear_namespace(self.current_buf, ns, 0, -1)

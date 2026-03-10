@@ -1,21 +1,18 @@
 local M = {}
 -- Function to replace the quickfix window, using a nui.nvim menu instead
 
-local Popup = require("nui.popup")
+local Preview = require("functions.preview")
 local Menu = require("nui.menu")
-local Preview = require('functions.preview')
 local Layout = require("nui.layout")
+local event = require("nui.utils.autocmd").event
 
 ---@class Quickfix.item
 ---@field text string Short description of the quickfix item
 ---@field path string The path where to find the quickfix location
----@field line integer? The line of the item
+---@field pos ({ [1]: integer, [2]: integer })? Position of the item
 
 ---@type NuiMenu?
 local menu = nil
-
----@type integer?
-local longest_line = nil
 
 ---@type Preview?
 local preview = nil
@@ -30,13 +27,23 @@ function M.open(title, items)
     if layout then M.close() end
     if #items == 0 then return end
 
-    if #items > 1 then
-        M.create_menu(title, items)
-    end
-
     local show_item = nil
     if #items == 1 then
         show_item = items[1]
+
+        local bufnr = vim.fn.bufnr(show_item.path)
+        local winid = (bufnr == -1) and -1 or vim.fn.bufwinid(bufnr)
+        if winid ~= -1 then
+            vim.api.nvim_set_current_win(winid)
+            if show_item.pos then
+                vim.api.nvim_win_set_cursor(winid, show_item.pos)
+            end
+            return
+        end
+    end
+
+    if not show_item then
+        M.create_menu(title, items)
     end
 
     M.create_ui(show_item)
@@ -61,7 +68,6 @@ function M.close()
     end
 
     menu = nil
-    longest_line = nil
     preview = nil
     layout = nil
 end
@@ -78,6 +84,7 @@ function M.create_ui(item)
 
     ---@type nui_layout_options
     local layout_opts = {
+        relative = "editor",
         position = "50%",
         size = {
             width = "90%",
@@ -107,6 +114,12 @@ function M.update_layout()
         box = Layout.Box({
             Layout.Box(preview, { size = "100%" }),
         }, { dir = "row", size = "100%" })
+
+        preview:on(event.WinLeave, function()
+            vim.print("Event")
+            preview:unmount()
+        end)
+        preview:enter()
     end
 
     layout:update(box)
@@ -118,9 +131,7 @@ end
 ---@private
 function M.create_menu(title, items)
     local lines = {}
-    longest_line = 0
     for _, item in pairs(items) do
-        longest_line = math.max(longest_line, #item.text)
         lines[#lines+1] = Menu.item(item.text, item)
     end
 
@@ -149,8 +160,9 @@ end
 ---@private
 function M.on_submit(item)
     if not preview then return end
+    if not menu then return end
 
-    menu = nil
+    menu:unmount()
     preview:show_item(item, { full_open = true })
     M.update_layout()
 end
@@ -183,11 +195,16 @@ function M.conv_qlist_entries(entires)
         if not entry.text then goto continue end
         if not entry.filename then goto continue end
 
+        local pos = nil
+        if entry.lnum then
+            pos = { entry.lnum, entry.col or 0 }
+        end
+
         ---@type Quickfix.item
         local item = {
             text = entry.text:match("^%s*(.-)%s*$"),
             path = entry.filename,
-            line = entry.lnum,
+            pos = pos
         }
 
         items[#items+1] = item

@@ -11,6 +11,9 @@ local function load_preview(path, line)
     local bufnr = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 
+    local s = "Hello,
+    World"
+
     local ft = vim.filetype.match({ filename = path }) or ""
     vim.bo[bufnr].modifiable = false
     vim.bo[bufnr].filetype = ft
